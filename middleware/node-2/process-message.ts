@@ -1,4 +1,5 @@
 import { isOwnClockAhead, updateClock } from "./clock";
+import writeToFile from "./write-request";
 
 type RequestType = "UPDATE" | "INSERT" | "DELETE";
 
@@ -14,6 +15,7 @@ export default async function processMessage(requestType: RequestType, args: str
             console.log("Node is Ahead No Need to do anything!");
         } else {
             // Otherwise perform operation
+            writeToFile(args[0]);
             console.log("Operation Performed!", requestType, args)
 
             // Update clock
