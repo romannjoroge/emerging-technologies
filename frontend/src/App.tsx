@@ -2,31 +2,36 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
+import PasswordForm from "@/components/password-form";
+import { Toaster } from "@/components/ui/toaster";
+import { X, Plus } from "lucide-react";
 function App() {
   return (
     <>
       <Drawer>
-        <DrawerTrigger>Open</DrawerTrigger>
+        <DrawerTrigger>
+          <Button className=" my-12 flex items-center justify-center ml-2  ">
+            <Plus className="w-4 h-4"></Plus>
+            <div>Add</div>
+          </Button>
+        </DrawerTrigger>
         <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-            <DrawerDescription>This action cannot be undone.</DrawerDescription>
-          </DrawerHeader>
-          <DrawerFooter>
-            <Button>Submit</Button>
-            <DrawerClose>
-              <Button variant="outline">Cancel</Button>
-            </DrawerClose>
-          </DrawerFooter>
+          <PasswordForm />
+          <DrawerClose>
+            <Button
+              size="sm"
+              variant="ghost"
+              className=" h-auto w-auto  focus-visible:ring-0 focus-visible:ring-offset-0 p-2 absolute  top-1 right-2  text-neutral-800  hover:text-rose-500  rounded-full "
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </DrawerClose>
         </DrawerContent>
       </Drawer>
+      <Toaster />
     </>
   );
 }
