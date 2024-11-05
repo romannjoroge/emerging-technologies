@@ -14,6 +14,9 @@ importers:
       express:
         specifier: ^4.21.1
         version: 4.21.1
+      node-lmdb:
+        specifier: ^0.10.1
+        version: 0.10.1
     devDependencies:
       '@types/express':
         specifier: ^5.0.0
@@ -637,9 +640,19 @@ packages:
   mz@2.7.0:
     resolution: {integrity: sha512-z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==}
 
+  nan@2.22.0:
+    resolution: {integrity: sha512-nbajikzWTMwsW+eSsNm3QwlOs7het9gGJU5dDZzRTQGk03vyBOauxgI4VakDzE0PtsGTmXPsXTbbjVhRwR5mpw==}
+
   negotiator@0.6.3:
     resolution: {integrity: sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==}
     engines: {node: '>= 0.6'}
+
+  node-gyp-build@4.8.2:
+    resolution: {integrity: sha512-IRUxE4BVsHWXkV/SFOut4qTlagw2aM8T5/vnTsmrHJvVoKueJHRc/JaFND7QDDc61kLYUJ6qlZM3sqTSyx2dTw==}
+    hasBin: true
+
+  node-lmdb@0.10.1:
+    resolution: {integrity: sha512-hrao55cGl/gp0ybJa0bH8P28DeDoi2V1gWvwXcdPClO1YFymnqIOL3qmDqIjbVQViE7c5XwGHb4/sacmYZMK0A==}
 
   object-assign@4.1.1:
     resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}
@@ -1419,7 +1432,16 @@ snapshots:
       object-assign: 4.1.1
       thenify-all: 1.6.0
 
+  nan@2.22.0: {}
+
   negotiator@0.6.3: {}
+
+  node-gyp-build@4.8.2: {}
+
+  node-lmdb@0.10.1:
+    dependencies:
+      nan: 2.22.0
+      node-gyp-build: 4.8.2
 
   object-assign@4.1.1: {}
 
