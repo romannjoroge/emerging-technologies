@@ -2,7 +2,7 @@ import "dotenv/config";
 import Express from "express";
 import store from "./store";
 import { MIDDLEWARE_CLOCK } from "./constants";
-import { initSchema } from "./types";
+import { initSchema, passwordSchema } from "./types";
 import database from "./database";
 
 const app = Express()
@@ -35,13 +35,29 @@ app.post("/initialize", (req, res) => {
 })
 
 //@ts-ignore
-app.get("/get", (req, res) => {
-    return res.send("GET")
+app.get("/get/:service", async (req, res) => {
+    try {
+        const service = req.params.service;
+        const password = await database.getPassword(service);
+        
+        return res.json(password);
+    } catch(err) {
+        console.log("Error Getting Password => ", err);
+    }
 });
 
 //@ts-ignore
 app.post("/add", (req, res) => {
-    return res.status(201).send("ADD");
+    try {
+        const parsed = passwordSchema.safeParse(req.body);
+        if (parsed.success) {
+            return res.status(201).send("ADD");
+        } else {
+            return res.status(404).json({err: parsed.error})
+        }      
+    } catch(err) {
+
+    }
 });
 
 //@ts-ignore

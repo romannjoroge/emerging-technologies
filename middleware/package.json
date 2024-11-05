@@ -17,10 +17,14 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
+    "@types/scryptsy": "^2.0.3",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "node-lmdb": "^0.10.1",
+    "scryptsy": "^2.1.0",
     "sqlite3": "^5.1.7",
+    "tweetnacl": "^1.0.3",
+    "tweetnacl-util": "^0.15.1",
     "zod": "^3.23.8"
   }
 }

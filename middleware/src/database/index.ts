@@ -6,6 +6,15 @@ interface Neighbour {
     address: string
 }
 
+interface Password {
+    id: number,
+    email?: string,
+    password: string,
+    note?: string,
+    service: string
+    usename?: string
+}
+
 class Database {
     private db = new sqlite3.Database('db');
     constructor() {
@@ -48,7 +57,28 @@ class Database {
                 return res(neighbours);
             })
         })
+    }
 
+    getPassword(service: string): Promise<Password> {
+        return new Promise((res, rej) => {
+            this.db.get("SELECT id, email, password, aob as note, service, username FROM passwords WHERE service = ? ORDER BY id DESC LIMIT 1 ", [service], (err, row: Password[]) => {
+                if(err) {
+                    console.log("Error Getting Password From Database => ", err);
+                    return rej(new Error("Could Not Get Password"));
+                }
+
+                return res(row[0])
+            })
+        })
+    }
+
+    storePassword(service: string) {
+        try {
+            
+        } catch(err) {
+            console.log("Error Storing Password => ", err);
+            throw "Error Storing Password";
+        }
     }
 }
 
