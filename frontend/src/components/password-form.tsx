@@ -11,6 +11,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
+import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 
@@ -21,9 +23,10 @@ const formSchema = z.object({
     invalid_type_error: "service name must be a string",
   }),
   password: z.string().min(1, {
-    message: "the password is missing",
+    message: "the password is required",
   }),
   username: z.string(),
+  note: z.string(),
 });
 
 export default function PasswordForm() {
@@ -34,6 +37,7 @@ export default function PasswordForm() {
       password: "",
       service: "",
       email: "",
+      note: "",
     },
   });
 
@@ -54,7 +58,7 @@ export default function PasswordForm() {
         <div className=" text-sm text-gray-600  mb-4">
           fill in this form and submit it to save your details locally
         </div>
-        <div className="space-y-4">
+        <div className="">
           <FormField
             control={form.control}
             name="username"
@@ -64,7 +68,7 @@ export default function PasswordForm() {
                 <FormControl>
                   <Input placeholder="e.g mbeka02" {...field} />
                 </FormControl>
-                <FormDescription>
+                <FormDescription className="sr-only">
                   This is your public display name.
                 </FormDescription>
                 <FormMessage />
@@ -80,7 +84,9 @@ export default function PasswordForm() {
                 <FormControl>
                   <Input placeholder="e.g mbeka02@gmail.com" {...field} />
                 </FormControl>
-                <FormDescription>Enter your email address.</FormDescription>
+                <FormDescription className="sr-only">
+                  Enter your email address.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -99,7 +105,9 @@ export default function PasswordForm() {
                     type="password"
                   />
                 </FormControl>
-                <FormDescription>Enter the password.</FormDescription>
+                <FormDescription className="sr-only">
+                  Enter the password.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -113,7 +121,27 @@ export default function PasswordForm() {
                 <FormControl>
                   <Input placeholder="e.g Instagram" {...field} />
                 </FormControl>
-                <FormDescription>
+                <FormDescription className="sr-only">
+                  This is the name of the service or platform.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="note"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Note</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="type your note here"
+                    className="max-h-28"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription className="sr-only">
                   This is the name of the service or platform.
                 </FormDescription>
                 <FormMessage />
