@@ -6,6 +6,7 @@ import { initSchema, passwordSchema } from "./types";
 import database from "./database";
 
 const app = Express()
+app.use("/", Express.json())
 
 // This is only to be called once when a client is being set up
 //@ts-ignore
@@ -51,7 +52,8 @@ app.post("/add", (req, res) => {
     try {
         const parsed = passwordSchema.safeParse(req.body);
         if (parsed.success) {
-            return res.status(201).send("ADD");
+            database.storePassword(parsed.data);
+            return res.status(201).json({message: "Password Saved Succesfully!"});
         } else {
             return res.status(404).json({err: parsed.error})
         }      
