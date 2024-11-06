@@ -1,38 +1,19 @@
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
-import PasswordForm from "@/components/password-form";
 import { Toaster } from "@/components/ui/toaster";
-import { X, Plus } from "lucide-react";
+import FormDrawer from "@/components/form-drawer";
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
 function App() {
   return (
-    <>
-      <Drawer>
-        <DrawerTrigger>
-          <Button className=" my-12 flex items-center justify-center ml-2  ">
-            <Plus className="w-4 h-4"></Plus>
-            <div>Add</div>
-          </Button>
-        </DrawerTrigger>
-        <DrawerContent>
-          <PasswordForm />
-          <DrawerClose>
-            <Button
-              size="sm"
-              variant="ghost"
-              className=" h-auto w-auto  focus-visible:ring-0 focus-visible:ring-offset-0 p-2 absolute  top-1 right-2  text-neutral-800  hover:text-rose-500  rounded-full "
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </DrawerClose>
-        </DrawerContent>
-      </Drawer>
+    <main className="min-h-screen w-screen relative bg-white flex-col p-2 px-4">
+      <FormDrawer>
+        <Button className="text-lg absolute right-6 h-10 top-1 font-semibold  w-28 rounded-md">
+          <Plus className="w-4 h-4"></Plus>
+          <div>Add</div>
+        </Button>
+      </FormDrawer>
       <Toaster />
-    </>
+    </main>
   );
 }
 
