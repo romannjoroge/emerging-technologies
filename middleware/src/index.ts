@@ -59,13 +59,21 @@ app.post("/add", (req, res) => {
             return res.status(404).json({err: parsed.error})
         }      
     } catch(err) {
-
+        console.log("Error Adding password =>", err);
+        return res.status(500).json({message: "Internal sever error"})
     }
 });
 
 //@ts-ignore
-app.delete("/delete", (req, res) => {
-    return res.status(201).send("DELETE");
+app.delete("/delete/:id", (req, res) => {
+    try {
+        let id = Number.parseInt(req.params.id);
+        database.deletePassword(id);
+        return res.status(201).json({message: "Password Deleted Succesfully!"})
+    } catch(err) {
+        console.log("Error Deleting Password", err);
+        return res.status(500).json({message: "Internal Sever Error"})
+    }
 });
 
 //@ts-ignore
