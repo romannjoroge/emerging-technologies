@@ -37,6 +37,28 @@ class Encrypt {
             this.privateKey = fs.readFileSync(PRIVATE_KEY_FILE, "utf-8");
         }
     }
+
+    encrypt(text: string): Buffer {
+        try {
+            const bufferMessage = Buffer.from(text, "utf-8");
+            let encrypted = crypto.publicEncrypt(this.publicKey, bufferMessage);
+            return encrypted;
+        } catch(err) {
+            console.log("Error Encrypting =>", err);
+            throw "Could Not Encrypt";
+        }
+    }
+
+    decrypt(buffer: Buffer): string {
+        try {
+            let decryped = crypto.privateDecrypt(this.privateKey, buffer);
+            return decryped.toString();
+        } catch(err) {
+            console.log("Error Decrypting =>", err);
+            throw "Could Not Decrypt";
+        }
+    }
 }
 
-const encrypt = new Encrypt();
+let encrypt = new Encrypt();
+export default encrypt;
