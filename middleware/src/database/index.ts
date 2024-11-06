@@ -102,6 +102,15 @@ class Database {
             throw "Error Storing Password";
         }
     }
+
+    deletePassword(id: number) {
+        try {
+            this.db.run("DELETE FROM passwords WHERE id = ?", [id]);
+        } catch(err) {
+            console.log("Error Deleting Password =>", err);
+            throw "Error Deleting Password"
+        }
+    }
 }
 
 let database = new Database();
