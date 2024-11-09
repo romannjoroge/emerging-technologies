@@ -52,7 +52,7 @@ export default function PasswordForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-3/4 mx-auto p-2 grid"
+        className=" w-full md:w-3/4 px-6  md:px-2 lg:px-0 mx-auto py-2 grid"
       >
         <div className="text-2xl  font-black">Add A New Password</div>
         <div className=" text-sm text-gray-600  mb-4">
@@ -137,7 +137,7 @@ export default function PasswordForm() {
                 <FormControl>
                   <Textarea
                     placeholder="type your note here"
-                    className="max-h-28"
+                    className=" h-36  resize-none"
                     {...field}
                   />
                 </FormControl>
@@ -151,7 +151,7 @@ export default function PasswordForm() {
         </div>
         <Button
           type="submit"
-          className="my-4  w-1/3 h-12 text-lg font-semibold rounded-md justify-self-center"
+          className="my-6 w-full md:w-1/2 lg:w-1/3 h-12 text-lg font-semibold rounded-md justify-self-center"
         >
           Submit
         </Button>
