@@ -3,7 +3,6 @@ import FormDrawer from "@/components/form-drawer";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PasswordTable from "./components/password-table";
-
 function App() {
   return (
     <main className="min-h-screen w-screen relative bg-gray-50 flex-col p-2 px-4">
