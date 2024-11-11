@@ -12,7 +12,7 @@ function App() {
           <div>Add</div>
         </Button>
       </FormDrawer>
-      <div className="md:ml-2 mt-12">
+      <div className="md:ml-2 mt-12 ">
         <PasswordTable />
       </div>
       <Toaster />
