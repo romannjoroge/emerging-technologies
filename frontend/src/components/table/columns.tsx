@@ -10,14 +10,26 @@ import {
 
 import { ColumnDef } from "@tanstack/react-table";
 import { passwordEntrySchema } from "@/schema/zod";
-import { MoreHorizontal, Trash, X } from "lucide-react";
+import { MoreHorizontal, Trash, ArrowUpDown } from "lucide-react";
 import z from "zod";
 import { toast } from "sonner";
 
 export const columns: ColumnDef<z.infer<typeof passwordEntrySchema>>[] = [
   {
     accessorKey: "service",
-    header: "Service",
+
+    header: ({ column }) => {
+      return (
+        <Button
+          className=" p-0 "
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Service
+          <ArrowUpDown className=" h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "username",
