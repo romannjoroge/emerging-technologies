@@ -10,10 +10,9 @@ import {
 } from "@/components/ui/table";
 import { useQuery } from "@tanstack/react-query";
 import Loader from "./loader";
-
 const PasswordTable = () => {
   const { data, isError, isLoading, error } = useQuery({
-    queryKey: ["data"],
+    queryKey: ["PasswordData"],
     queryFn: GetPasswordData,
   });
   if (isLoading) {

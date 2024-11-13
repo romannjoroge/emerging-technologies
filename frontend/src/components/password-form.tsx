@@ -14,10 +14,12 @@ import {
 
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { PostPasswordData } from "@/services";
 
 const formSchema = z.object({
-  email: z.string().min(1, { message: "email is required" }).email(),
+  email: z.string().email().optional(),
   service: z.string({
     required_error: "the name of the service is required",
     invalid_type_error: "service name must be a string",
@@ -25,11 +27,12 @@ const formSchema = z.object({
   password: z.string().min(1, {
     message: "the password is required",
   }),
-  username: z.string(),
-  note: z.string(),
+  username: z.string().optional(),
+  note: z.string().optional(),
 });
 
 export default function PasswordForm() {
+  const queryClient = useQueryClient();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,12 +43,20 @@ export default function PasswordForm() {
       note: "",
     },
   });
-
+  const mutation = useMutation({
+    mutationFn: PostPasswordData,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["PasswordData"] });
+      toast.success("the password has been added");
+    },
+    onError: (error) => {
+      toast.error(`${error}`);
+    },
+  });
   function onSubmit(values: z.infer<typeof formSchema>) {
+    mutation.mutate(values);
+
     console.log(values);
-    toast({
-      description: "submitted",
-    });
   }
 
   return (

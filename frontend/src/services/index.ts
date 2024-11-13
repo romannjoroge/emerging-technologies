@@ -17,5 +17,18 @@ async function GetPasswordData(): Promise<PasswordData[]> {
     throw new Error("error: unable to get your passwords");
   }
 }
-
-export { GetPasswordData };
+async function PostPasswordData(passwordData: PasswordData) {
+  try {
+    const response = await fetch(`${BASE_URL}/add`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(passwordData),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("unable to save the password");
+  }
+}
+export { GetPasswordData, PostPasswordData };

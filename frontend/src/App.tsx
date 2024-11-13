@@ -1,4 +1,4 @@
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "sonner";
 import FormDrawer from "@/components/form-drawer";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
