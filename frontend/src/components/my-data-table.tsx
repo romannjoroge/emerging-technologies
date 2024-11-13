@@ -1,7 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { columns } from "./table/columns";
-// import { passwordEntrySchema } from "@/schema/zod";
-// import { PasswordData } from "@/services";
 import Loader from "./loader";
 import { samplePasswordData } from "@/constants";
 import { DataTable } from "./table/data-table";

@@ -14,8 +14,6 @@ function App() {
         </Button>
       </FormDrawer>
       <div className="md:ml-2 mt-12 ">
-        {/*    <PasswordTable />*/}
-
         <MyDataTable />
         <DataTableDemo />
       </div>
