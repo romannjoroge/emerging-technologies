@@ -4,9 +4,9 @@ import Loader from "./loader";
 import { samplePasswordData } from "@/constants";
 import { DataTable } from "./table/data-table";
 
-const MyDataTable = () => {
+const PasswordEntriesTable = () => {
   const { data, isError, isLoading, error } = useQuery({
-    queryKey: ["dummyData"],
+    queryKey: ["entries"],
     queryFn: async function getData() {
       return samplePasswordData;
     },
@@ -28,4 +28,4 @@ const MyDataTable = () => {
   );
 };
 
-export { MyDataTable };
+export { PasswordEntriesTable };
