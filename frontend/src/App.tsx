@@ -2,7 +2,8 @@ import { Toaster } from "sonner";
 import FormDrawer from "@/components/form-drawer";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import PasswordTable from "./components/password-table";
+import { MyDataTable } from "./components/my-data-table";
+import { DataTableDemo } from "./components/data-table";
 function App() {
   return (
     <main className="min-h-screen w-screen relative bg-gray-50 flex-col p-2 px-4">
@@ -13,7 +14,10 @@ function App() {
         </Button>
       </FormDrawer>
       <div className="md:ml-2 mt-12 ">
-        <PasswordTable />
+        {/*    <PasswordTable />*/}
+
+        <MyDataTable />
+        <DataTableDemo />
       </div>
       <Toaster />
     </main>

@@ -17,24 +17,11 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { PostPasswordData } from "@/services";
-
-const formSchema = z.object({
-  email: z.string().email().optional(),
-  service: z.string({
-    required_error: "the name of the service is required",
-    invalid_type_error: "service name must be a string",
-  }),
-  password: z.string().min(1, {
-    message: "the password is required",
-  }),
-  username: z.string().optional(),
-  note: z.string().optional(),
-});
-
+import { passwordEntrySchema } from "@/schema/zod";
 export default function PasswordForm() {
   const queryClient = useQueryClient();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof passwordEntrySchema>>({
+    resolver: zodResolver(passwordEntrySchema),
     defaultValues: {
       username: "",
       password: "",
@@ -53,7 +40,7 @@ export default function PasswordForm() {
       toast.error(`${error}`);
     },
   });
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof passwordEntrySchema>) {
     mutation.mutate(values);
 
     console.log(values);
