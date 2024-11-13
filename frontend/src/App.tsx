@@ -1,8 +1,8 @@
 import { Toaster } from "sonner";
-import FormDrawer from "@/components/form-drawer";
+import FormDrawer from "@/components/form/form-drawer";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PasswordEntriesTable } from "./components/my-data-table";
+import { PasswordEntriesTable } from "@/components/table/password-entries-table";
 function App() {
   return (
     <main className="min-h-screen w-screen relative bg-gray-50 flex-col p-2 px-4">

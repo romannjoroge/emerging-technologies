@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { columns } from "./table/columns";
-import Loader from "./loader";
+import { columns } from "../table/columns";
+import Loader from "../loader";
 import { samplePasswordData } from "@/constants";
-import { DataTable } from "./table/data-table";
+import { DataTable } from "../table/data-table";
 
 const PasswordEntriesTable = () => {
   const { data, isError, isLoading, error } = useQuery({
