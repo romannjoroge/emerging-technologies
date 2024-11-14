@@ -1,4 +1,7 @@
+import { passwordEntrySchema } from "@/schema/zod";
+import z from "zod";
 export interface PasswordData {
+  id: number;
   password: string;
   service: string;
   email?: string;
@@ -17,7 +20,9 @@ async function GetPasswordData(): Promise<PasswordData[]> {
     throw new Error("error: unable to get your passwords");
   }
 }
-async function PostPasswordData(passwordData: PasswordData) {
+async function PostPasswordData(
+  passwordData: z.infer<typeof passwordEntrySchema>,
+) {
   try {
     const response = await fetch(`${BASE_URL}/add`, {
       method: "POST",
@@ -31,4 +36,12 @@ async function PostPasswordData(passwordData: PasswordData) {
     throw new Error("unable to save the password");
   }
 }
-export { GetPasswordData, PostPasswordData };
+async function DeletePasswordEntry(id: number) {
+  try {
+    await fetch(`${BASE_URL}/delete?id=${id}`);
+  } catch (error) {
+    console.error(error);
+    throw new Error("unable to delete the password entry");
+  }
+}
+export { GetPasswordData, PostPasswordData, DeletePasswordEntry };
