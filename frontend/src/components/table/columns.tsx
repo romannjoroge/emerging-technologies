@@ -9,12 +9,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { passwordEntrySchema } from "@/schema/zod";
+// import { passwordEntrySchema } from "@/schema/zod";
 import { MoreHorizontal, Trash, ArrowUpDown } from "lucide-react";
-import z from "zod";
+// import z from "zod";
 import { toast } from "sonner";
+import { PasswordData } from "@/services";
 
-export const columns: ColumnDef<z.infer<typeof passwordEntrySchema>>[] = [
+export const columns: ColumnDef<PasswordData>[] = [
+  {
+    accessorKey: "id",
+    header: "ID",
+  },
+
   {
     accessorKey: "service",
 

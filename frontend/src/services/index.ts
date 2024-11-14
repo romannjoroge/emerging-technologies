@@ -1,4 +1,7 @@
+import { passwordEntrySchema } from "@/schema/zod";
+import z from "zod";
 export interface PasswordData {
+  id: number;
   password: string;
   service: string;
   email?: string;
@@ -17,7 +20,9 @@ async function GetPasswordData(): Promise<PasswordData[]> {
     throw new Error("error: unable to get your passwords");
   }
 }
-async function PostPasswordData(passwordData: PasswordData) {
+async function PostPasswordData(
+  passwordData: z.infer<typeof passwordEntrySchema>,
+) {
   try {
     const response = await fetch(`${BASE_URL}/add`, {
       method: "POST",
