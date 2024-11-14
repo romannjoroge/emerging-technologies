@@ -44,4 +44,23 @@ async function DeletePasswordEntry(id: number) {
     throw new Error("unable to delete the password entry");
   }
 }
-export { GetPasswordData, PostPasswordData, DeletePasswordEntry };
+async function UpdatePasswordEntry(
+  passwordData: z.infer<typeof passwordEntrySchema>,
+) {
+  try {
+    await fetch(`${BASE_URL}/update`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(passwordData),
+    });
+  } catch (error) {
+    console.error(error);
+    throw new Error("unable to update the password");
+  }
+}
+export {
+  GetPasswordData,
+  PostPasswordData,
+  DeletePasswordEntry,
+  UpdatePasswordEntry,
+};
