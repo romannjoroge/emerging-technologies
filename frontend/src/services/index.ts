@@ -36,4 +36,12 @@ async function PostPasswordData(
     throw new Error("unable to save the password");
   }
 }
-export { GetPasswordData, PostPasswordData };
+async function DeletePasswordEntry(id: number) {
+  try {
+    await fetch(`${BASE_URL}/delete?id=${id}`);
+  } catch (error) {
+    console.error(error);
+    throw new Error("unable to delete the password entry");
+  }
+}
+export { GetPasswordData, PostPasswordData, DeletePasswordEntry };
