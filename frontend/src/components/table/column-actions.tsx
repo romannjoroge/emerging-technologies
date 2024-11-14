@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Clipboard, MoreHorizontal, Pencil, Trash } from "lucide-react";
 import { PasswordData } from "@/services";
+import { PasswordDialog } from "../password-dialog";
 interface ColumnActionsProps {
   entry: PasswordData;
 }
@@ -48,10 +49,15 @@ const ColumnActions = ({ entry }: ColumnActionsProps) => {
           Copy password
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="flex items-center space-x-2">
-          <Pencil className="w-2 h-2" />
-          Update entry
-        </DropdownMenuItem>
+        <PasswordDialog>
+          <DropdownMenuItem
+            className="flex items-center space-x-2"
+            onSelect={(e) => e.preventDefault()}
+          >
+            <Pencil className="w-2 h-2" />
+            Update entry
+          </DropdownMenuItem>
+        </PasswordDialog>
         <DropdownMenuSeparator />
 
         <DropdownMenuItem
