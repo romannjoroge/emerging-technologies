@@ -2,7 +2,7 @@ import "dotenv/config";
 import Express from "express";
 import store from "./store";
 import { MIDDLEWARE_CLOCK } from "./constants";
-import { initSchema, passwordSchema } from "./types";
+import { initSchema, passwordSchema, updatePasswordSchema } from "./types";
 import database from "./database";
 
 const app = Express()
@@ -32,6 +32,17 @@ app.post("/initialize", (req, res) => {
     } catch (err) {
         console.log("Error Initializing Middleware => ", err);
         return res.status(500).json({err: "Internal Server Error"})
+    }
+})
+
+//@ts-ignore
+app.get("/get", async (req, res) => {
+    try {
+        const passwords = database.getAllPasswords();
+        return res.json(passwords);
+    } catch(err) {
+        console.log("Error Getting All Passwords =>", err);
+        return res.status(500).json({err: "Internal server error"})
     }
 })
 
@@ -77,8 +88,21 @@ app.delete("/delete/:id", (req, res) => {
 });
 
 //@ts-ignore
-app.put("/update", (req, res) => {
-    return res.status(201).send("UPDATE");
+app.patch("/update/:id", (req, res) => {
+    try {
+        let id = Number.parseInt(req.params.id);
+        let parsed = updatePasswordSchema.safeParse(req.body);
+        if (parsed.success) {
+            database.updatePassword(id, parsed.data);
+            return res.status(201).json({message: "Updated password successful"})
+        } else {
+            return res.status(400).json({message: parsed.error});
+        }
+    } catch(err) {
+        console.log("Error Updating Password", err);
+        return res.status(500).json({message: "Internal Sever Error"})
+    }
+    
 })
 
 app.listen(process.env.PORT, () => {

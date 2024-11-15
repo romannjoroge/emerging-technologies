@@ -1,6 +1,6 @@
 import sqlite3 from "sqlite3";
 import encrypt from "../crypto";
-import { PasswordType } from "../types";
+import { PasswordType, UpdatePassword } from "../types";
 
 interface Neighbour {
     id: number,
@@ -70,6 +70,21 @@ class Database {
         })
     }
 
+    getAllPasswords(): Promise<Password[]> {
+        return new Promise((res, rej) => {
+            let passwords: Password[] = [];
+            this.db.each("SELECT id, email, password, aob as note, service, username FROM passwords ORDER BY id", (err, row: RawPassword) => {
+                if(err) {
+                    console.log("Error Getting Passwords =>", err);
+                    return rej(new Error("Error Getting Passwords"))
+                }
+
+                passwords.push({...row, password: encrypt.decrypt(row.password)})
+                return res(passwords)
+            });
+        })
+    }
+
     getPassword(service: string): Promise<Password> {
         return new Promise((res, rej) => {
             this.db.get("SELECT id, email, password, aob as note, service, username FROM passwords WHERE service = ? ORDER BY id DESC LIMIT 1 ", [service], (err, row: RawPassword) => {
@@ -111,7 +126,45 @@ class Database {
             throw "Error Deleting Password"
         }
     }
+
+    updatePassword(id: number, content: UpdatePassword) {
+        try {
+            if(content.email) {
+                this.db.run("UPDATE passwords SET email = ? WHERE id = ?", [content.email, id])
+            }
+
+            if(content.note) {
+                this.db.run("UPDATE passwords SET aob = ? WHERE id = ?", [content.note, id])
+            }
+
+            if(content.password) {
+                const encryptedPassword = encrypt.encrypt(content.password);
+                this.db.run("UPDATE passwords SET password = ? WHERE id = ?", [encryptedPassword, id])
+            }
+
+            if(content.service) {
+                this.db.run("UPDATE passwords SET service = ? WHERE id = ?", [content.service, id])
+            }
+
+            if(content.username) {
+                this.db.run("UPDATE passwords SET username = ? WHERE id = ?", [content.username, id])
+            }
+        } catch(err) {
+            console.log("Error Updating password", err);
+            throw "Error Updating Password";
+        }
+    }
 }
 
 let database = new Database();
+
+(async () => {
+    try {
+        const data = await database.getAllPasswords();
+        console.log("Passwords =>", data);
+    } catch(err) {
+        console.log("Error Testing =>", err);
+    }
+})();
+
 export default database;

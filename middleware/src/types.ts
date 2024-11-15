@@ -17,4 +17,13 @@ export const passwordSchema = z.object({
    username: z.string().optional() 
 })
 
+export const updatePasswordSchema = z.object({
+    password: z.string().optional(),
+    email: z.string().optional(),
+    note: z.string().optional(),
+    service: z.string().optional(),
+    username: z.string().optional()
+});
+
+export type UpdatePassword = z.infer<typeof updatePasswordSchema>;
 export type PasswordType = z.infer<typeof passwordSchema>;
