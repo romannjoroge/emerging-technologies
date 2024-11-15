@@ -158,13 +158,4 @@ class Database {
 
 let database = new Database();
 
-(async () => {
-    try {
-        const data = await database.getAllPasswords();
-        console.log("Passwords =>", data);
-    } catch(err) {
-        console.log("Error Testing =>", err);
-    }
-})();
-
 export default database;
