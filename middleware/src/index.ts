@@ -2,7 +2,7 @@ import "dotenv/config";
 import Express from "express";
 import store from "./store";
 import { MIDDLEWARE_CLOCK, UPDATE_ENDPOINT } from "./constants";
-import { initSchema, passwordSchema, updatePasswordSchema } from "./types";
+import { handleMessageSchema, initSchema, passwordSchema, updatePasswordSchema } from "./types";
 import database from "./database";
 import Clock from "./clock";
 import Neighbour from "./neighbours";
@@ -129,7 +129,56 @@ app.patch("/update/:id", async (req, res) => {
 //@ts-ignore
 app.post(`/${UPDATE_ENDPOINT}`, async (req, res) => {
     try {
+        let parsed = handleMessageSchema.safeParse(req.body);
 
+        if (parsed.success) {
+            // Check if clock is ahead
+            let isAhead = Clock.isOwnClockAhead(parsed.data.clock);
+
+            if (isAhead) {
+                // Do nothing if own clock is ahead
+                return res.status(201).json({message: "Clock is Ahead"});
+            }
+
+            // Update if clock not ahead
+            let data = parsed.data;
+            if (data.requestType === "ADD") {
+                let password = passwordSchema.safeParse(data.args);
+                if (password.success) {
+                    database.storePassword(password.data);
+                    Clock.updateClock(data.clock);
+                    return res.status(201).json({message: "Succesfully stored password"});
+                } else {
+                    return res.status(400).json({message: "Invalid Password", err: password.error})
+                }
+            } else if (data.requestType === "DELETE") {
+                if (data.args.service) {
+                    database.deletePasswordWithService(data.args.service)
+                    Clock.updateClock(data.clock);
+                    return res.status(201).json({message: "Successfully deleted password"})
+                } else {
+                    return res.status(400).json({message: "Invalid Service Name Could Not Delete"});
+                }
+            } else if (data.requestType === "UPDATE") {
+                if (data.args.service) {
+                    let service = data.args.service;
+                    let updateArgsParsed = updatePasswordSchema.safeParse(data.args.update);
+
+                    if (updateArgsParsed.success) {
+                        let updateArgs = updateArgsParsed.data;
+                        database.updatePasswordWithService(service, updateArgs);
+                        Clock.updateClock(data.clock);
+                        return res.status(201).json({message: "Successfully updated password"})
+                    } else {
+                        return res.status(400).json({message: "Invalid Update Password Args", error: updateArgsParsed.error});
+                    }
+                } else {
+                    return res.status(400).json({message: "Invalid Service Name Could Not Update"});
+                }
+            }
+        } else {
+            return res.status(400).json({err: parsed.error})
+        }
     } catch(err) {
         console.log("Error Handling other clients message =>", err);
         return res.status(500).json({err: "Internal server error"});
