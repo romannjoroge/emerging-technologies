@@ -14,6 +14,23 @@ const FLAG_FILE = "init_done.flag";
         fs.writeFileSync(FLAG_FILE, "Initialization complete");
     }
 })();
+function cleanup() {
+    if (fs.existsSync(FLAG_FILE)) {
+        fs.unlinkSync(FLAG_FILE);
+        console.log("Cleanup complete: Flag file deleted.");
+    }
+}
+
+process.on("SIGINT", () => {
+    console.log("SIGINT received: Shutting down gracefully...");
+    cleanup();
+    process.exit(0);
+});
+
+process.on("exit", () => {
+    console.log("Process exiting: Performing cleanup...");
+    cleanup();
+});
 app.use("/", cors({ origin: "*" }), json());
 app.get("/", (req, res) => {
     res.json({ msg: "test" });
