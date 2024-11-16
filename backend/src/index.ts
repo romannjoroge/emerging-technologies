@@ -5,23 +5,11 @@ import _ from "lodash";
 import cors from "cors";
 import "dotenv/config";
 const app = express();
-
+initializePasswords();
 app.use("/", cors({ origin: "*" }), json());
-
 app.get("/", (req, res) => {
-
     res.json({ msg: "test" });
 });
-
-//@ts-ignore
-app.post("/initialize", async (req, res) => {
-    const parsed = initSchema.safeParse(req.body);
-    if (!parsed.success) {
-        return res.status(400).json({ error: parsed.error });
-    }
-    const data = parsed.data;
-    const result = await initializePasswords(data);
-})
 //@ts-ignore
 app.get("/get", async (req, res) => {
     try {

@@ -1,4 +1,5 @@
 import { BASE_HOST, PasswordType, InitType } from "./types";
+import * as crypto from "node:crypto";
 import axios from "axios";
 export async function createPassword(password: PasswordType) {
     try {
@@ -45,6 +46,12 @@ export async function getPasswords() {
         throw e;
     }
 }
-export async function initializePasswords(init: InitType) {
+export async function initializePasswords() {
+    const init: InitType = {
+        clientName: crypto.randomBytes(20).toString('hex'),
+        clock: {},
+        neighbours: []
+    }
+
     return await axios.post(`${BASE_HOST}/initialize`, init);
 }
