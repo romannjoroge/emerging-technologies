@@ -16,7 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { PostPasswordData } from "@/services";
+import { PostPasswordEntry } from "@/services";
 import { passwordEntrySchema } from "@/schema/zod";
 export default function PasswordForm() {
   const queryClient = useQueryClient();
@@ -31,7 +31,7 @@ export default function PasswordForm() {
     },
   });
   const mutation = useMutation({
-    mutationFn: PostPasswordData,
+    mutationFn: PostPasswordEntry,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["entries"] });
       toast.success("the password has been added");

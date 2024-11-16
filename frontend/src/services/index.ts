@@ -14,7 +14,7 @@ interface UpdatePasswordData {
   id: number;
 }
 export const BASE_URL = "http://localhost:5000";
-async function GetPasswordData(): Promise<PasswordData[]> {
+async function GetPasswordEntries(): Promise<PasswordData[]> {
   try {
     const response = await fetch(`${BASE_URL}/get`);
     const data = await response.json();
@@ -24,7 +24,7 @@ async function GetPasswordData(): Promise<PasswordData[]> {
     throw new Error("error: unable to get your passwords");
   }
 }
-async function PostPasswordData(
+async function PostPasswordEntry(
   passwordData: z.infer<typeof passwordEntrySchema>,
 ) {
   try {
@@ -63,8 +63,8 @@ async function UpdatePasswordEntry({ passwordData, id }: UpdatePasswordData) {
   }
 }
 export {
-  GetPasswordData,
-  PostPasswordData,
+  GetPasswordEntries,
+  PostPasswordEntry,
   DeletePasswordEntry,
   UpdatePasswordEntry,
 };
