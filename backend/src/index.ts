@@ -1,11 +1,19 @@
 import express, { json } from "express";
 import { createPassword, getPassword, deletePassword, updatePassword, initializePasswords, getPasswords } from "./routes";
 import { Password, passwordschema, PasswordType, initSchema } from "./types";
+import fs from "fs";
 import _ from "lodash";
 import cors from "cors";
 import "dotenv/config";
 const app = express();
-initializePasswords();
+
+const FLAG_FILE = "init_done.flag";
+(function safeInitializePasswords() {
+    if (!fs.existsSync(FLAG_FILE)) {
+        initializePasswords();
+        fs.writeFileSync(FLAG_FILE, "Initialization complete");
+    }
+})();
 app.use("/", cors({ origin: "*" }), json());
 app.get("/", (req, res) => {
     res.json({ msg: "test" });

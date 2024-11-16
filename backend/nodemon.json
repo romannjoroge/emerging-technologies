@@ -1,5 +1,6 @@
 {
   "watch": ["src", ".env"],
   "ext": "ts,js",
-  "exec": "tsx src/index.ts"
+  "exec": "tsx src/index.ts",
+  "ignore": ["init_done.flag"]
 }

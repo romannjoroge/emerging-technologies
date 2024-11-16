@@ -52,6 +52,6 @@ export async function initializePasswords() {
         clock: {},
         neighbours: []
     }
-
+    console.log("Ran initializePasswords");
     return await axios.post(`${BASE_HOST}/initialize`, init);
 }
