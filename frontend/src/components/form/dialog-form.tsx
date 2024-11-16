@@ -32,7 +32,7 @@ export default function DialogForm() {
   const mutation = useMutation({
     mutationFn: UpdatePasswordEntry,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["PasswordData"] });
+      queryClient.invalidateQueries({ queryKey: ["entries"] });
       toast.success("the entry has been updated");
     },
     onError: (error) => {

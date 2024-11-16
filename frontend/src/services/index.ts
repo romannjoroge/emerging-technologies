@@ -15,7 +15,6 @@ async function GetPasswordData(): Promise<PasswordData[]> {
     const data = await response.json();
     return data;
   } catch (error) {
-    // do some other stuff
     console.error(error);
     throw new Error("error: unable to get your passwords");
   }
@@ -38,7 +37,9 @@ async function PostPasswordData(
 }
 async function DeletePasswordEntry(id: number) {
   try {
-    await fetch(`${BASE_URL}/delete?id=${id}`);
+    await fetch(`${BASE_URL}/delete/${id}`, {
+      method: "DELETE",
+    });
   } catch (error) {
     console.error(error);
     throw new Error("unable to delete the password entry");

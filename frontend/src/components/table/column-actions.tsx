@@ -21,7 +21,7 @@ const ColumnActions = ({ entry }: ColumnActionsProps) => {
   const DeleteMutation = useMutation({
     mutationFn: DeletePasswordEntry,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["PasswordData"] });
+      queryClient.invalidateQueries({ queryKey: ["entries"] });
       toast.success("the password has been deleted successfully");
     },
     onError: (error) => {

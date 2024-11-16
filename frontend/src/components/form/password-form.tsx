@@ -33,7 +33,7 @@ export default function PasswordForm() {
   const mutation = useMutation({
     mutationFn: PostPasswordData,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["PasswordData"] });
+      queryClient.invalidateQueries({ queryKey: ["entries"] });
       toast.success("the password has been added");
     },
     onError: (error) => {
