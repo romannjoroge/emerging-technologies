@@ -1,4 +1,4 @@
-import { MIDDLEWARE_CLOCK } from "../constants";
+import { CLIENT_NAME, MIDDLEWARE_CLOCK } from "../constants";
 import store from "../store";
 
 export default class Clock {
@@ -8,6 +8,7 @@ export default class Clock {
 
             // Store the current vector clock key somewhere
             store.store(MIDDLEWARE_CLOCK, JSON.stringify(neighbourClock));
+            store.store(CLIENT_NAME, clientName);
         } catch(err) {
             console.log("Error Setting Up Clock =>", err);
             throw "Error Setting Up Clock";
@@ -31,26 +32,53 @@ export default class Clock {
     }
 
     static isOwnClockAhead(other: Record<string, number>): boolean {
-        let ownClock = this.getClock();
-        for (let key of Object.keys(other)) {
-            if (other[key] > ownClock[key]) {
-                return false;
+        try {
+            let ownClock = this.getClock();
+            for (let key of Object.keys(other)) {
+                if (other[key] > ownClock[key]) {
+                    return false;
+                }
             }
+        
+            return true;
+        } catch(err) {
+            console.log("Error Checking if clock is ahead => ", err);
+            throw "Error Checking if clock is ahead";
         }
-    
-        return true;
     }
 
     static updateClock(other: Record<string, number>){
-        let ownClock = this.getClock();
-        // Compare each pair in other
-        for (let key of Object.keys(other)) {
-            // If any has a greater value than own update own with 1 plus other
-            if (other[key] > ownClock[key]) {
-                ownClock[key] = other[key] + 1;
+        try {
+            let ownClock = this.getClock();
+            // Compare each pair in other
+            for (let key of Object.keys(other)) {
+                // If any has a greater value than own update own with 1 plus other
+                if (other[key] > ownClock[key]) {
+                    ownClock[key] = other[key] + 1;
+                }
             }
+        
+            store.store(MIDDLEWARE_CLOCK, ownClock.toString())
+        } catch(err) {
+            console.log("Error Updating Clock =>", err);
+            throw "Error Updating Clock";
         }
-    
-        store.store(MIDDLEWARE_CLOCK, ownClock.toString())
+    }
+
+    static incrementClock() {
+        try {
+            let clock = this.getClock();
+            let client_name = store.read(CLIENT_NAME);
+
+            if (client_name) {
+                clock[client_name] += 1;
+                store.store(MIDDLEWARE_CLOCK, JSON.stringify(clock));
+            } else {
+                throw "Could Not Get Client name";
+            }
+        } catch(err) {
+            console.log("Error Incrementing clock =>", err);
+            throw "Could Not Increment Clock"
+        }
     }
 }
