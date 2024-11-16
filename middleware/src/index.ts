@@ -5,6 +5,7 @@ import { MIDDLEWARE_CLOCK } from "./constants";
 import { initSchema, passwordSchema, updatePasswordSchema } from "./types";
 import database from "./database";
 import Clock from "./clock";
+import Neighbour from "./neighbours";
 
 const app = Express()
 app.use("/", Express.json())
@@ -19,11 +20,7 @@ app.post("/initialize", (req, res) => {
             let {clock, clientName, neighbours} = data;
             
             Clock.setupClock(clientName, clock);
-
-            // Store neighbours as well somewhere
-            neighbours.forEach((ne) => {
-                database.storeNeighbour(ne.name, ne.address);
-            })
+            Neighbour.setupNeighbours(neighbours);
             return res.status(201).json({ message: "Middleware set up successfully" })
         } else {
             return res.status(401).json({err: parsed.error});
@@ -64,6 +61,13 @@ app.post("/add", (req, res) => {
         const parsed = passwordSchema.safeParse(req.body);
         if (parsed.success) {
             database.storePassword(parsed.data);
+
+            Clock.incrementClock();
+            Neighbour.updateNeighbours({
+                requestType: "ADD",
+                args: parsed.data,
+                clock: Clock.getClock()
+            });
             return res.status(201).json({message: "Password Saved Succesfully!"});
         } else {
             return res.status(404).json({err: parsed.error})
@@ -75,10 +79,20 @@ app.post("/add", (req, res) => {
 });
 
 //@ts-ignore
-app.delete("/delete/:id", (req, res) => {
+app.delete("/delete/:id", async (req, res) => {
     try {
         let id = Number.parseInt(req.params.id);
+        let password = await database.getPasswordFromID(id);
         database.deletePassword(id);
+
+        Clock.incrementClock();
+        Neighbour.updateNeighbours({
+            requestType: "DELETE",
+            args: {
+                service: password.service
+            },
+            clock: Clock.getClock()
+        })
         return res.status(201).json({message: "Password Deleted Succesfully!"})
     } catch(err) {
         console.log("Error Deleting Password", err);
@@ -87,12 +101,20 @@ app.delete("/delete/:id", (req, res) => {
 });
 
 //@ts-ignore
-app.patch("/update/:id", (req, res) => {
+app.patch("/update/:id", async (req, res) => {
     try {
         let id = Number.parseInt(req.params.id);
         let parsed = updatePasswordSchema.safeParse(req.body);
         if (parsed.success) {
+            let password = await database.getPasswordFromID(id);
             database.updatePassword(id, parsed.data);
+
+            Clock.incrementClock();
+            Neighbour.updateNeighbours({
+                requestType: "UPDATE",
+                args: {service: password.service, update: parsed.data},
+                clock: Clock.getClock()
+            })
             return res.status(201).json({message: "Updated password successful"})
         } else {
             return res.status(400).json({message: parsed.error});

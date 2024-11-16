@@ -85,6 +85,25 @@ class Database {
         })
     }
 
+    getPasswordFromID(id: number): Promise<Password> {
+        return new Promise((res, rej) => {
+            this.db.get("SELECT id, email, password, aob as note, service, username FROM passwords WHERE id = ? ", [id], (err, row: RawPassword) => {
+                if(err) {
+                    console.log("Error Getting Password From Database => ", err);
+                    return rej(new Error("Could Not Get Password"));
+                }
+                return res({
+                  id: row.id,
+                  email: row.email,
+                  password: encrypt.decrypt(row.password),
+                  note: row.note,
+                  service: row.service,
+                  username: row.username
+                })
+            })
+        })
+    }
+
     getPassword(service: string): Promise<Password> {
         return new Promise((res, rej) => {
             this.db.get("SELECT id, email, password, aob as note, service, username FROM passwords WHERE service = ? ORDER BY id DESC LIMIT 1 ", [service], (err, row: RawPassword) => {
@@ -127,6 +146,15 @@ class Database {
         }
     }
 
+    deletePasswordWithService(service: string) {
+        try {
+            this.db.run("DELETE FROM passwords WHERE service = ?", [service]);
+        } catch(err) {
+            console.log("Error Deleting Password =>", err);
+            throw "Error Deleting Password"
+        }
+    }
+
     updatePassword(id: number, content: UpdatePassword) {
         try {
             if(content.email) {
@@ -148,6 +176,34 @@ class Database {
 
             if(content.username) {
                 this.db.run("UPDATE passwords SET username = ? WHERE id = ?", [content.username, id])
+            }
+        } catch(err) {
+            console.log("Error Updating password", err);
+            throw "Error Updating Password";
+        }
+    }
+
+    updatePasswordWithService(service: string, content: UpdatePassword) {
+        try {
+            if(content.email) {
+                this.db.run("UPDATE passwords SET email = ? WHERE service = ?", [content.email, service])
+            }
+
+            if(content.note) {
+                this.db.run("UPDATE passwords SET aob = ? WHERE service = ?", [content.note, service])
+            }
+
+            if(content.password) {
+                const encryptedPassword = encrypt.encrypt(content.password);
+                this.db.run("UPDATE passwords SET password = ? WHERE service = ?", [encryptedPassword, service])
+            }
+
+            if(content.service) {
+                this.db.run("UPDATE passwords SET service = ? WHERE service = ?", [content.service, service])
+            }
+
+            if(content.username) {
+                this.db.run("UPDATE passwords SET username = ? WHERE service = ?", [content.username, service])
             }
         } catch(err) {
             console.log("Error Updating password", err);

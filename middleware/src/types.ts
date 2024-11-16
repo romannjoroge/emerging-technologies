@@ -27,3 +27,4 @@ export const updatePasswordSchema = z.object({
 
 export type UpdatePassword = z.infer<typeof updatePasswordSchema>;
 export type PasswordType = z.infer<typeof passwordSchema>;
+export type InitSchema = z.infer<typeof initSchema>
