@@ -49,7 +49,7 @@ const ColumnActions = ({ entry }: ColumnActionsProps) => {
           Copy password
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <PasswordDialog>
+        <PasswordDialog entry={entry}>
           <DropdownMenuItem
             className="flex items-center space-x-2"
             onSelect={(e) => e.preventDefault()}

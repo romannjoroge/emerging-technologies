@@ -15,18 +15,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { UpdatePasswordEntry } from "@/services";
+import { PasswordData, UpdatePasswordEntry } from "@/services";
 import { passwordEntrySchema } from "@/schema/zod";
-export default function DialogForm() {
+export default function DialogForm({ entry }: { entry: PasswordData }) {
   const queryClient = useQueryClient();
   const form = useForm<z.infer<typeof passwordEntrySchema>>({
     resolver: zodResolver(passwordEntrySchema),
     defaultValues: {
-      username: "",
-      password: "",
-      service: "",
-      email: "",
-      note: "",
+      username: entry.username || "",
+      password: entry.password || "",
+      service: entry.service || "",
+      email: entry.email || "",
+      note: entry.note || "",
     },
   });
   const mutation = useMutation({
@@ -40,7 +40,7 @@ export default function DialogForm() {
     },
   });
   function onSubmit(values: z.infer<typeof passwordEntrySchema>) {
-    mutation.mutate(values);
+    mutation.mutate({ passwordData: values, id: entry.id });
   }
 
   return (
