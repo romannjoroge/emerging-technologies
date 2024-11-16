@@ -4,6 +4,7 @@ import store from "./store";
 import { MIDDLEWARE_CLOCK } from "./constants";
 import { initSchema, passwordSchema, updatePasswordSchema } from "./types";
 import database from "./database";
+import Clock from "./clock";
 
 const app = Express()
 app.use("/", Express.json())
@@ -16,10 +17,8 @@ app.post("/initialize", (req, res) => {
         if (parsed.success) {
             const data = parsed.data
             let {clock, clientName, neighbours} = data;
-            clock[clientName] = 0;
-
-            // Store the current vector clock key somewhere
-            store.store(MIDDLEWARE_CLOCK, JSON.stringify(clock));
+            
+            Clock.setupClock(clientName, clock);
 
             // Store neighbours as well somewhere
             neighbours.forEach((ne) => {

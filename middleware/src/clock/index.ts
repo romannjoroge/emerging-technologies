@@ -2,7 +2,19 @@ import { MIDDLEWARE_CLOCK } from "../constants";
 import store from "../store";
 
 export default class Clock {
-    getClock(): Record<string, any> {
+    static setupClock(clientName: string, neighbourClock: Record<string, any>) {
+        try {
+            neighbourClock[clientName] = 0;
+
+            // Store the current vector clock key somewhere
+            store.store(MIDDLEWARE_CLOCK, JSON.stringify(neighbourClock));
+        } catch(err) {
+            console.log("Error Setting Up Clock =>", err);
+            throw "Error Setting Up Clock";
+        }
+    }
+
+    static getClock(): Record<string, any> {
         try {
             // Get clock from store
             const rawClock = store.read(MIDDLEWARE_CLOCK);
@@ -18,7 +30,7 @@ export default class Clock {
         }
     }
 
-    isOwnClockAhead(other: Record<string, number>): boolean {
+    static isOwnClockAhead(other: Record<string, number>): boolean {
         let ownClock = this.getClock();
         for (let key of Object.keys(other)) {
             if (other[key] > ownClock[key]) {
@@ -29,7 +41,7 @@ export default class Clock {
         return true;
     }
 
-    updateClock(other: Record<string, number>){
+    static updateClock(other: Record<string, number>){
         let ownClock = this.getClock();
         // Compare each pair in other
         for (let key of Object.keys(other)) {
