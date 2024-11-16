@@ -13,5 +13,14 @@ export const passwordschema = z.object({
     service: z.string(),
     usename: z.string().optional()
 })
+export const initSchema = z.object({
+    clock: z.record(z.string(), z.number()),
+    clientName: z.string(),
+    neighbours: z.array(z.object({
+        name: z.string(),
+        address: z.string()
+    }))
+})
+export type InitType = z.infer<typeof initSchema>;
 export type PasswordType = z.infer<typeof passwordschema>;
 export const BASE_HOST = "http://localhost:3000";
