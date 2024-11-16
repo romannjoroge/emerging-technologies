@@ -8,6 +8,11 @@ export interface PasswordData {
   username?: string;
   note?: string;
 }
+
+interface UpdatePasswordData {
+  passwordData: z.infer<typeof passwordEntrySchema>;
+  id: number;
+}
 export const BASE_URL = "http://localhost:5000";
 async function GetPasswordData(): Promise<PasswordData[]> {
   try {
@@ -45,12 +50,10 @@ async function DeletePasswordEntry(id: number) {
     throw new Error("unable to delete the password entry");
   }
 }
-async function UpdatePasswordEntry(
-  passwordData: z.infer<typeof passwordEntrySchema>,
-) {
+async function UpdatePasswordEntry({ passwordData, id }: UpdatePasswordData) {
   try {
-    await fetch(`${BASE_URL}/update`, {
-      method: "PUT",
+    await fetch(`${BASE_URL}/update/${id}`, {
+      method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(passwordData),
     });

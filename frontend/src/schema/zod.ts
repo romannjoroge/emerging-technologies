@@ -1,7 +1,7 @@
 import z from "zod";
 
 const passwordEntrySchema = z.object({
-  email: z.string().email().optional(),
+  email: z.union([z.literal(""), z.string().email()]),
   service: z.string({
     required_error: "the name of the service is required",
     invalid_type_error: "service name must be a string",

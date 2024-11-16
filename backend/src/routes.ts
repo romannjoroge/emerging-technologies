@@ -9,9 +9,9 @@ export async function createPassword(password: PasswordType) {
     throw e;
   }
 }
-export async function updatePassword(password: PasswordType) {
+export async function updatePassword(password: PasswordType, id: string) {
   try {
-    return await axios.put(`${BASE_HOST}/update`, password);
+    return await axios.patch(`${BASE_HOST}/update/${id}`, password);
   } catch (e) {
     console.log(e);
     throw e;

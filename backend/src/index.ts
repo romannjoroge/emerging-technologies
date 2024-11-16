@@ -108,16 +108,21 @@ app.delete("/delete/:id", async (req, res) => {
 });
 
 //@ts-ignore
-app.put("/update", async (req, res) => {
+app.patch("/update/:id", async (req, res) => {
   try {
+    const { id } = req.params;
+    if (!id || _.isNumber(id)) {
+      return res
+        .status(400)
+        .json({ error: "id is required, should be a number" });
+    }
     const body = req.body;
-    console.log(req.body);
     let data = passwordschema.safeParse(body);
     if (!data.success) {
       return res.status(400).json({ error: data.error });
     }
     let parsed = data.data;
-    const result = await updatePassword(parsed);
+    const result = await updatePassword(parsed, id);
     return res
       .status(201)
       .send({ data: result.data, message: "Password updated" });
