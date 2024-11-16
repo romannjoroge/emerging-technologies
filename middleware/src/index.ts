@@ -1,7 +1,7 @@
 import "dotenv/config";
 import Express from "express";
 import store from "./store";
-import { MIDDLEWARE_CLOCK } from "./constants";
+import { MIDDLEWARE_CLOCK, UPDATE_ENDPOINT } from "./constants";
 import { initSchema, passwordSchema, updatePasswordSchema } from "./types";
 import database from "./database";
 import Clock from "./clock";
@@ -124,6 +124,16 @@ app.patch("/update/:id", async (req, res) => {
         return res.status(500).json({message: "Internal Sever Error"})
     }
     
+});
+
+//@ts-ignore
+app.post(`/${UPDATE_ENDPOINT}`, async (req, res) => {
+    try {
+
+    } catch(err) {
+        console.log("Error Handling other clients message =>", err);
+        return res.status(500).json({err: "Internal server error"});
+    }
 })
 
 app.listen(process.env.PORT, () => {

@@ -1,12 +1,8 @@
 import { UPDATE_ENDPOINT } from "../constants";
 import database from "../database";
-import { InitSchema } from "../types";
+import { InitSchema, UpdateNeighbour } from "../types";
 
-interface UpdateNeighbour {
-    requestType: "ADD" | "DELETE" | "UPDATE",
-    args: Record<string, any>,
-    clock: Record<string, any>
-}
+
 
 export default class Neighbour {
     static setupNeighbours(neighbours: InitSchema['neighbours']) {
