@@ -57,7 +57,6 @@ class Database {
                 if (err) {
                     return rej("Could Not Get Neighbours");
                 } else {
-                    console.log(row);
                     neighbours.push({
                         id: row.id,
                         name: row.name,
@@ -213,14 +212,4 @@ class Database {
 }
 
 let database = new Database();
-
-(async () => {
-    try {
-        const data = await database.getAllPasswords();
-        console.log("Passwords =>", data);
-    } catch(err) {
-        console.log("Error Testing =>", err);
-    }
-})();
-
 export default database;
