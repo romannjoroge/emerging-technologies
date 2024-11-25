@@ -1,0 +1,5 @@
+data/*.mdb
+dist/
+node_modules/
+db
+id_rsa*
