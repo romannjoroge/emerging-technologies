@@ -25,5 +25,15 @@ export const updatePasswordSchema = z.object({
     username: z.string().optional()
 });
 
+
+
+export const handleMessageSchema = z.object({
+    requestType: z.enum(["ADD", "DELETE", "UPDATE"]),
+    args: z.record(z.string(), z.any()),
+    clock: z.record(z.string(), z.number()),
+})
+
 export type UpdatePassword = z.infer<typeof updatePasswordSchema>;
 export type PasswordType = z.infer<typeof passwordSchema>;
+export type InitSchema = z.infer<typeof initSchema>
+export type UpdateNeighbour = z.infer<typeof handleMessageSchema>;
