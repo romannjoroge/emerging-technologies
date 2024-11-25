@@ -1,0 +1,47 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Development files
+*.log
+npm-debug.log*
+pnpm-debug.log*
+.coverage
+coverage
+
+# Editor directories
+.idea
+.vscode
+*.swp
+*.swo
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Git files
+.git
+.gitignore
+
+# Docker files
+Dockerfile
+.dockerignore
+
+# Testing
+__tests__
+test
+tests
+*.test.js
+*.spec.js
+
+# Misc
+README.md
+*.md
+.husky
+.editorconfig
