@@ -50,7 +50,7 @@ async function PairDevice(pairingData: z.infer<typeof pairSchema>) {
     });
   } catch (error) {
     console.error(error);
-    throw new Error("unable to save the password");
+    throw new Error("unable to pair with the device");
   }
 }
 async function DeletePasswordEntry(id: number) {
