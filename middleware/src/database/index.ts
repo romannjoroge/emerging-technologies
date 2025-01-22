@@ -30,7 +30,6 @@ class Database {
     private db = new sqlite3.Database('db');
     constructor() {
         try {
-            console.log("Initializing stuff")
             this.db.serialize(() => {
                 this.db.run("CREATE TABLE IF NOT EXISTS neighbours (id INTEGER PRIMARY KEY, name TEXT NOT NULL, address TEXT NOT NULL)");
                 this.db.run("CREATE TABLE IF NOT EXISTS passwords (id INTEGER PRIMARY KEY, service TEXT NOT NULL, password BLOB NOT NULL, username TEXT, email TEXT, aob TEXT)");

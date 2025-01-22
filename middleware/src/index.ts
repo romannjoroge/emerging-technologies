@@ -5,8 +5,14 @@ import { handleMessageSchema, initSchema, passwordSchema, updatePasswordSchema }
 import database from "./database";
 import Clock from "./clock";
 import Neighbour from "./neighbours";
+import cors from "cors";
 
 const app = Express();
+
+app.use(cors({
+    credentials: true,
+    origin: '*'
+}));
 app.use("/", Express.json());
 
 // This is only to be called once when a client is being set up
