@@ -18,5 +18,7 @@ services:
     environment:
       - BASEHOST=http://middleware:3000
       - PORT=5000
+    ports:
+      - 5001:5000
     depends_on:
       - middleware
