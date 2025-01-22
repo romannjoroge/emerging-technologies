@@ -1,0 +1,11 @@
+services:
+  middleware:
+    image: romannjoroge/emerging-technologies:v0.1.0 
+    ports:
+      - 3000:5000
+  frontend:
+    image: mbeka02/emerging-technologies
+    ports:
+      - 1000:80
+  backend:
+    image: patrickojiambo/emerging-backend
