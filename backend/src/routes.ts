@@ -50,3 +50,18 @@ export async function initializePasswords() {
   console.log("Ran initializePasswords");
   return await axios.post(`${BASE_HOST}/initialize`, init);
 }
+
+export async function pair(name: string, address: string, url: string) {
+  try {
+    // Get all passwords
+    const resp = await getPasswords();
+    // Send data to middleware
+    await axios.post(`${url}/pair`, {
+      neighbour: {name, address},
+      passwords: resp.data
+    })
+  } catch(err) {
+    console.log("Error Pairing", err);
+    throw new Error("Error Pairing");
+  }
+}

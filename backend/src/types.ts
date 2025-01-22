@@ -23,6 +23,13 @@ export const initSchema = z.object({
     }),
   ),
 });
+
+export const pairSchema = z.object({
+  url: z.string(),
+  name: z.string(),
+  address: z.string()
+});
+
 export type InitType = z.infer<typeof initSchema>;
 export type PasswordType = z.infer<typeof passwordschema>;
 export const BASE_HOST = "http://localhost:3000";

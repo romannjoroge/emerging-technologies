@@ -6,8 +6,9 @@ import {
   updatePassword,
   initializePasswords,
   getPasswords,
+  pair,
 } from "./routes";
-import { Password, passwordschema, PasswordType, initSchema } from "./types";
+import { Password, passwordschema, PasswordType, initSchema, pairSchema } from "./types";
 import fs from "fs";
 import _ from "lodash";
 import cors from "cors";
@@ -130,6 +131,22 @@ app.patch("/update/:id", async (req, res) => {
     return res.status(400).json({ error: error });
   }
 });
+
+app.post("/pair", async (req, res) => {
+  try {
+    const parsed = pairSchema.safeParse(req.body);
+    if (parsed.success) {
+      const data = parsed.data;
+      await pair(data.name, data.address, data.url);
+      res.status(201).json({message: "Paired Succesfully"})
+    } else {
+      res.status(400).json({error: parsed.error});
+    }
+  } catch(err) {
+    console.log("Error Pairing");
+    res.status(501).json({ error: "Internal Server Error"});
+  }
+})
 
 const port = process.env.PORT ?? "5000";
 app.listen(port, () => {
