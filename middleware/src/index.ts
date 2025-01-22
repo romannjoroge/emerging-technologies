@@ -1,7 +1,7 @@
 import "dotenv/config";
 import Express from "express";
 import { UPDATE_ENDPOINT } from "./constants";
-import { handleMessageSchema, initSchema, passwordSchema, updatePasswordSchema } from "./types";
+import { handleMessageSchema, initSchema, pairSchema, passwordSchema, updatePasswordSchema } from "./types";
 import database from "./database";
 import Clock from "./clock";
 import Neighbour from "./neighbours";
@@ -41,7 +41,6 @@ app.get("/get", async (req, res) => {
   try {
     console.log("I am here");
     const passwords = await database.getAllPasswords();
-    console.log(passwords, "I am done")
     return res.json(passwords);
   } catch (err) {
     console.log("Error Getting All Passwords =>", err);
@@ -115,6 +114,7 @@ app.delete("/delete/:id", async (req, res) => {
 //@ts-ignore
 app.patch("/update/:id", async (req, res) => {
     try {
+        console.log("I am hit");
         let id = Number.parseInt(req.params.id);
         let parsed = updatePasswordSchema.safeParse(req.body);
         if (parsed.success) {
@@ -134,6 +134,7 @@ app.patch("/update/:id", async (req, res) => {
             })
             return res.status(201).json({message: "Updated password successful"})
         } else {
+            console.log("Issue");
             return res.status(400).json({message: parsed.error});
         }
     } catch(err) {
@@ -195,6 +196,31 @@ app.post(`/${UPDATE_ENDPOINT}`, async (req, res) => {
             }
         } else {
             return res.status(400).json({err: parsed.error})
+        }
+    } catch(err) {
+        console.log("Error Handling other clients message =>", err);
+        return res.status(500).json({err: "Internal server error"});
+    }
+});
+
+//@ts-ignore
+app.post("/pair", async(req, res) => {
+    try {
+        const parsed = pairSchema.safeParse(req.body);
+        if (parsed.success) {
+            const data = parsed.data
+
+            // Add calling node as neighbour
+            database.storeNeighbour(data.neighbour.name, data.neighbour.address);
+
+            // Add passwords
+            for (let pass of data.passwords) {
+                database.storePassword(pass)
+            }
+
+            res.status(201).json({message: "Paired succesfully"})
+        } else {
+            res.status(400).json({message: "Invalid Pair Data"})
         }
     } catch(err) {
         console.log("Error Handling other clients message =>", err);

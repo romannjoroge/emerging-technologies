@@ -88,14 +88,15 @@ class Database {
 
     getPasswordFromID(id: number): Promise<Password | undefined> {
         return new Promise((res, rej) => {
-            let pass: RawPassword | undefined
+            let pass: RawPassword | undefined;
+            console.log(id);
             this.db.get("SELECT id, email, password, aob as note, service, username FROM passwords WHERE id = ? ", [id], (err, row: RawPassword) => {
                 if(err) {
                     console.log("Error Getting Password From Database => ", err);
                     return rej(new Error("Could Not Get Password"));
                 }
+                console.log(row);
                 pass = row;
-            }, (err, _) => {
                 if (pass) {
                     return res({
                         id: pass.id,
@@ -120,8 +121,7 @@ class Database {
                     console.log("Error Getting Password From Database => ", err);
                     return rej(new Error("Could Not Get Password"));
                 }
-                
-            }, (err, _) => {
+
                 if (pass) {
                     return res({
                         id: pass.id,
@@ -132,8 +132,9 @@ class Database {
                         username: pass.username
                       })
                 } else {
-                    return undefined;
+                    return res(undefined);
                 }
+                
             })
         })
     }

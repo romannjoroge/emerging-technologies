@@ -25,13 +25,26 @@ export const updatePasswordSchema = z.object({
     username: z.string().optional()
 });
 
-
-
 export const handleMessageSchema = z.object({
     requestType: z.enum(["ADD", "DELETE", "UPDATE"]),
     args: z.record(z.string(), z.any()),
     clock: z.record(z.string(), z.number()),
-})
+});
+
+export const pairSchema = z.object({
+    neighbour: z.object({
+        name: z.string(),
+        address: z.string()
+    }),
+    passwords: z.array(z.object({
+        id: z.number(),
+        email: z.string().optional(),
+        password: z.string(),
+        note: z.string().optional(),
+        service: z.string(),
+        username: z.string().optional()
+    }))
+});
 
 export type UpdatePassword = z.infer<typeof updatePasswordSchema>;
 export type PasswordType = z.infer<typeof passwordSchema>;
