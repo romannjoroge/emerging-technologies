@@ -1,12 +1,12 @@
 services:
   middleware:
-    image: romannjoroge/emerging-technologies:latest 
+    image: romannjoroge/emerging-technologies:latest
     ports:
       - 3000:5000
     environment:
       PORT: 3000
   frontend:
-    image: mbeka02/emerging-technologies
+    image: mbeka02/emerging-technologies:latest
     ports:
       - 1000:80
     depends_on:
