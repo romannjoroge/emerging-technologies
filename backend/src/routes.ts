@@ -1,6 +1,6 @@
 import { BASE_HOST, PasswordType, InitType } from "./types";
 import * as crypto from "node:crypto";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 export async function createPassword(password: PasswordType) {
   try {
     return await axios.post(`${BASE_HOST}/add`, password);
@@ -61,6 +61,11 @@ export async function pair(name: string, address: string, url: string) {
       passwords: resp.data
     })
   } catch(err) {
+
+    if (err instanceof AxiosError) {
+      console.log(err.response?.data?.error?.issues)
+    }
+
     console.log("Error Pairing", err);
     throw new Error("Error Pairing");
   }

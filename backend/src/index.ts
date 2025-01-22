@@ -134,12 +134,15 @@ app.patch("/update/:id", async (req, res) => {
 
 app.post("/pair", async (req, res) => {
   try {
+    console.log("Backend => Pair");
+    console.log(req.body);
     const parsed = pairSchema.safeParse(req.body);
     if (parsed.success) {
       const data = parsed.data;
       await pair(data.name, data.address, data.url);
       res.status(201).json({message: "Paired Succesfully"})
     } else {
+      console.log("Bad body =>", req.body);
       res.status(400).json({error: parsed.error});
     }
   } catch(err) {
