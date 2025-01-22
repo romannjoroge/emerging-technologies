@@ -1,4 +1,4 @@
-import { Home, Search, Settings } from "lucide-react";
+import { Home, FolderSync } from "lucide-react";
 
 import {
   Sidebar,
@@ -10,6 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { PairDialog } from "./pair-dialog";
 
 // Menu items.
 const items = [
@@ -17,16 +18,6 @@ const items = [
     title: "Home",
     url: "#",
     icon: Home,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
   },
 ];
 
@@ -48,6 +39,14 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <PairDialog>
+                <SidebarMenuItem>
+                  <SidebarMenuButton>
+                    <FolderSync />
+                    Pair A Device
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </PairDialog>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
