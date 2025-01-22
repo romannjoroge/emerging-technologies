@@ -14,7 +14,7 @@ services:
     environment:
       - VITE_API_URL=http://backend:5000 # Assuming backend runs on port 5000
   backend:
-    image: romannjoroge/emerging-technologies-backend:tagname:latest
+    image: romannjoroge/emerging-technologies-backend:latest
     environment:
       - BASEHOST=http://middleware:3000
       - PORT=5000
