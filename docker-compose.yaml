@@ -1,11 +1,15 @@
 services:
   middleware:
-    image: romannjoroge/emerging-technologies:v0.1.0 
+    image: romannjoroge/emerging-technologies:v0.1.0
     ports:
       - 3000:5000
   frontend:
     image: mbeka02/emerging-technologies
     ports:
       - 1000:80
+    depends_on:
+      - backend # Ensures backend starts first
+    environment:
+      - BACKEND_API_URL=http://backend:5000 # Assuming backend runs on port 5000
   backend:
     image: patrickojiambo/emerging-backend
