@@ -33,7 +33,9 @@ app.post("/initialize", (req, res) => {
 //@ts-ignore
 app.get("/get", async (req, res) => {
   try {
+    console.log("I am here");
     const passwords = await database.getAllPasswords();
+    console.log(passwords, "I am done")
     return res.json(passwords);
   } catch (err) {
     console.log("Error Getting All Passwords =>", err);
@@ -82,6 +84,11 @@ app.delete("/delete/:id", async (req, res) => {
     try {
         let id = Number.parseInt(req.params.id);
         let password = await database.getPasswordFromID(id);
+
+        if(!password) {
+            return res.status(201).json({message: "Password Deleted Succesfully!"})
+        }
+
         database.deletePassword(id);
 
         Clock.incrementClock();
@@ -106,6 +113,11 @@ app.patch("/update/:id", async (req, res) => {
         let parsed = updatePasswordSchema.safeParse(req.body);
         if (parsed.success) {
             let password = await database.getPasswordFromID(id);
+
+            if(!password) {
+                return res.status(400).json({error: "Password Does Not Exist"})
+            }
+
             database.updatePassword(id, parsed.data);
 
             Clock.incrementClock();

@@ -30,6 +30,7 @@ class Database {
     private db = new sqlite3.Database('db');
     constructor() {
         try {
+            console.log("Initializing stuff")
             this.db.serialize(() => {
                 this.db.run("CREATE TABLE IF NOT EXISTS neighbours (id INTEGER PRIMARY KEY, name TEXT NOT NULL, address TEXT NOT NULL)");
                 this.db.run("CREATE TABLE IF NOT EXISTS passwords (id INTEGER PRIMARY KEY, service TEXT NOT NULL, password BLOB NOT NULL, username TEXT, email TEXT, aob TEXT)");
@@ -71,6 +72,7 @@ class Database {
 
     getAllPasswords(): Promise<Password[]> {
         return new Promise((res, rej) => {
+            console.log("Getting passwords");
             let passwords: Password[] = [];
             this.db.each("SELECT id, email, password, aob as note, service, username FROM passwords ORDER BY id", (err, row: RawPassword) => {
                 if(err) {
@@ -79,45 +81,60 @@ class Database {
                 }
 
                 passwords.push({...row, password: encrypt.decrypt(row.password)})
+            }, (err, _) => {
                 return res(passwords)
             });
         })
     }
 
-    getPasswordFromID(id: number): Promise<Password> {
+    getPasswordFromID(id: number): Promise<Password | undefined> {
         return new Promise((res, rej) => {
+            let pass: RawPassword | undefined
             this.db.get("SELECT id, email, password, aob as note, service, username FROM passwords WHERE id = ? ", [id], (err, row: RawPassword) => {
                 if(err) {
                     console.log("Error Getting Password From Database => ", err);
                     return rej(new Error("Could Not Get Password"));
                 }
-                return res({
-                  id: row.id,
-                  email: row.email,
-                  password: encrypt.decrypt(row.password),
-                  note: row.note,
-                  service: row.service,
-                  username: row.username
-                })
+                pass = row;
+            }, (err, _) => {
+                if (pass) {
+                    return res({
+                        id: pass.id,
+                        email: pass.email,
+                        password: encrypt.decrypt(pass.password),
+                        note: pass.note,
+                        service: pass.service,
+                        username: pass.username
+                      })
+                } else {
+                    return res(undefined);
+                }
             })
         })
     }
 
-    getPassword(service: string): Promise<Password> {
+    getPassword(service: string): Promise<Password | undefined> {
         return new Promise((res, rej) => {
+            let pass: RawPassword | undefined;
             this.db.get("SELECT id, email, password, aob as note, service, username FROM passwords WHERE service = ? ORDER BY id DESC LIMIT 1 ", [service], (err, row: RawPassword) => {
                 if(err) {
                     console.log("Error Getting Password From Database => ", err);
                     return rej(new Error("Could Not Get Password"));
                 }
-                return res({
-                  id: row.id,
-                  email: row.email,
-                  password: encrypt.decrypt(row.password),
-                  note: row.note,
-                  service: row.service,
-                  username: row.username
-                })
+                
+            }, (err, _) => {
+                if (pass) {
+                    return res({
+                        id: pass.id,
+                        email: pass.email,
+                        password: encrypt.decrypt(pass.password),
+                        note: pass.note,
+                        service: pass.service,
+                        username: pass.username
+                      })
+                } else {
+                    return undefined;
+                }
             })
         })
     }
