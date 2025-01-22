@@ -13,4 +13,10 @@ const passwordEntrySchema = z.object({
   note: z.string().optional(),
 });
 
-export { passwordEntrySchema };
+const pairSchema = z.object({
+  name: z.string(),
+  address: z.string(),
+  url: z.string(),
+});
+
+export { passwordEntrySchema, pairSchema };
