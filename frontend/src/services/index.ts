@@ -1,4 +1,4 @@
-import { passwordEntrySchema } from "@/schema/zod";
+import { pairSchema, passwordEntrySchema } from "@/schema/zod";
 import z from "zod";
 const VITE_URL = import.meta.env.BACKEND_API_URL;
 export interface PasswordData {
@@ -41,6 +41,18 @@ async function PostPasswordEntry(
     throw new Error("unable to save the password");
   }
 }
+async function PairDevice(pairingData: z.infer<typeof pairSchema>) {
+  try {
+    await fetch(`${BASE_URL}/pair`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(pairingData),
+    });
+  } catch (error) {
+    console.error(error);
+    throw new Error("unable to save the password");
+  }
+}
 async function DeletePasswordEntry(id: number) {
   try {
     await fetch(`${BASE_URL}/delete/${id}`, {
@@ -68,4 +80,5 @@ export {
   PostPasswordEntry,
   DeletePasswordEntry,
   UpdatePasswordEntry,
+  PairDevice,
 };
