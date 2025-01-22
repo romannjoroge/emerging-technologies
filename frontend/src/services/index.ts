@@ -1,5 +1,6 @@
 import { passwordEntrySchema } from "@/schema/zod";
 import z from "zod";
+const VITE_URL = import.meta.env.BACKEND_API_URL;
 export interface PasswordData {
   id: number;
   password: string;
@@ -13,7 +14,7 @@ interface UpdatePasswordData {
   passwordData: z.infer<typeof passwordEntrySchema>;
   id: number;
 }
-export const BASE_URL = "http://localhost:5000";
+export const BASE_URL = VITE_URL ?? "http://localhost:5000";
 async function GetPasswordEntries(): Promise<PasswordData[]> {
   try {
     const response = await fetch(`${BASE_URL}/get`);
