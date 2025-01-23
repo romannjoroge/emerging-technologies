@@ -14,6 +14,7 @@ import _ from "lodash";
 import cors from "cors";
 import "dotenv/config";
 const app = express();
+app.use("/", express.json());
 
 const FLAG_FILE = "init_done.flag";
 (function safeInitializePasswords() {
